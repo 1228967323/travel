@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>黑马旅游网-我的收藏</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+        .tab-content .row > div {
+            margin-top: 16px;
+        }
+
+        .tab-content {
+            margin-bottom: 36px;
+        }
+    </style>
+    <script src="js/jquery-3.3.1.js"></script>
+</head>
+<body>
+<!--引入头部-->
+<div id="header"></div>
+<!-- 排行榜 start-->
+<section id="content">
+    <section class="hemai_jx">
+        <div class="jx_top">
+            <div class="jx_tit">
+                <img src="images/icon_5.jpg" alt="">
+                <span>我的收藏</span>
+            </div>
+        </div>
+        <div class="jx_content">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+            <div class="pageNum">
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </section>
+</section>
+<!-- 排行榜 end-->
+
+<!--引入尾部-->
+<div id="footer"></div>
+<!--导入布局js，共享header和footer-->
+<script type="text/javascript" src="js/include.js"></script>
+<script src="js/getParameter.js"></script>
+<script>
+    $(function () {
+        //发送异步请求FavoriteServlet获取分页的收藏列表数据
+        var curPage = getParameter("curPage");//获取当前页
+        var url = "/travel/favorite";//FavoriteServlet地址
+        var data = {action: "getPageBean", curPage: curPage};//提交数据
+        //回调函数
+        var callback = function (resultInfo) {
+            //判断有效性
+            if (resultInfo.flag) {
+                //获取pageBean对象数据
+                var pageBean = resultInfo.data;
+                //遍历当前页数据列表添加到列表位置
+                var html = "";
+                for (var i = 0; i < pageBean.data.length; i++) {
+                    var favorite = pageBean.data[i];
+                    html += "<div class=\"col-md-3\">\n" +
+                        "       <a href=\"route_detail.html\">\n" +
+                        "            <img src=\"" + favorite.route.rimage + "\" alt=\"\">\n" +
+                        "            <div class=\"has_border\">\n" +
+                        "                   <h3>" + favorite.route.rname + "</h3>\n" +
+                        "                   <div class=\"price\">网付价<em>￥</em><strong>" + favorite.route.price + "</strong><em>起</em></div>\n" +
+                        "            </div>\n" +
+                        "       </a>\n" +
+                        "  </div>";
+                }
+                //将生成的html设置到具体位置
+                $(".tab-content .tab-pane .row").html(html);
+                //更新分页信息
+                //首页
+                html = "<li><a href=\"myfavorite.html?curPage=" + pageBean.firstPage + "\">首页</a></li>";
+                //上一页,如果用户访问页数>1才显示上一页
+                if (pageBean.curPage > 1) {
+                    html += "<li class=\"threeword\"><a href=\"myfavorite.html?curPage=" + pageBean.prePage + "\">上一页</a></li>";
+                }
+                var begin;//起始页
+                var end;//结束页
+                //总页数<=10的情况
+                if (pageBean.totalPage <= 10) {
+                    begin = 1;
+                    end = pageBean.totalPage;
+                } else {
+                    //pageBean.totalPage总页数>10情况
+                    begin = pageBean.curPage - 5;
+                    end = pageBean.curPage + 4;
+                    //由于有加减计算，begin和end计算出来的结果就有可能越界，所以我们需要判断边界
+                    if (begin < 1) {
+                        begin = 1;
+                        end = 10;
+                    }
+                    if (end > pageBean.totalPage) {
+                        end = pageBean.totalPage;
+                        begin = pageBean.totalPage - 9;
+                    }
+                }
+                //遍历分页数字数据
+                for (var i = begin; i <= end; i++) {
+                    //如果遍历数字与当前访问页相等，那么当前页应用类样式curPage
+                    if (pageBean.curPage == i) {
+                        html += " <li class='curPage'><a href=\"myfavorite.html?curPage=" + i + "\">" + i + "</a></li>";
+                    } else {
+                        html += " <li><a href=\"myfavorite.html?curPage=" + i + "\">" + i + "</a></li>";
+                    }
+                }
+                //下一页 ，如果当前页<总页数才显示下一页
+                if (pageBean.curPage < pageBean.totalPage) {
+                    html += "<li class=\"threeword\"><a href=\"myfavorite.html?curPage=" + pageBean.nextPage + "\">下一页</a></li>";
+                }
+                //拼接尾部
+                html += "<li class=\"threeword\"><a href=\"myfavorite.html?curPage=" + pageBean.totalPage + "\">末页</a></li>"
+                //更新到分页信息位置
+                $(".pageNum ul").html(html);
+
+            }
+
+        };
+        var type = "json";//返回数据类型
+        //发送请求
+        $.post(url, data, callback, type);
+    });
+</script>
+</body>
+</html>
