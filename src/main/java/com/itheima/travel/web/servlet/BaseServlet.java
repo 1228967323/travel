@@ -2,6 +2,7 @@ package com.itheima.travel.web.servlet;
 
 import com.google.gson.Gson;
 import com.itheima.travel.model.ResultInfo;
+import com.sun.media.jfxmedia.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
