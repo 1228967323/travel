@@ -14,4 +14,6 @@ public interface IRouteService {
 
     Route findViewDetails(String rid) throws Exception;
 
+    List<Route> findAllRoute();
+
 }

@@ -90,4 +90,8 @@ public class RouteServlet extends BaseServlet {
         }
         return resultInfo;
     }
+    public ResultInfo findAll(HttpServletRequest request,HttpServletResponse response){
+        List<Route> allRoute = routeService.findAllRoute();
+        return new ResultInfo(true,allRoute,"查询成功!");
+    }
 }

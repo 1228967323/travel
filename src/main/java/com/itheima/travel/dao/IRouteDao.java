@@ -16,4 +16,5 @@ public interface IRouteDao {
     Map<String, Object> findViewDetails(String rid);
 
     List<RouteImg> findRouteImg(String rid);
+    List<Route> findAllRoute();
 }

@@ -97,4 +97,10 @@ public class RouteDao implements IRouteDao {
         List<RouteImg> RouteImgList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(RouteImg.class), rid);
         return RouteImgList;
     }
+
+    @Override
+    public List<Route> findAllRoute() {
+        String sql="select *from tab_route";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Route.class));
+    }
 }

@@ -1,6 +1,7 @@
 package com.itheima.travel.service;
 
 import com.itheima.travel.dao.IRouteDao;
+import com.itheima.travel.dao.RouteDao;
 import com.itheima.travel.factory.BeansFactory;
 import com.itheima.travel.model.*;
 import org.apache.commons.beanutils.BeanUtils;
@@ -61,6 +62,11 @@ public class RouteService implements IRouteService {
         route.setSeller(seller);
         route.setRouteImgList(routeImgList);
         return route ;
+    }
+
+    @Override
+    public List<Route> findAllRoute() {
+        return routeDao.findAllRoute();
     }
 
     /**
