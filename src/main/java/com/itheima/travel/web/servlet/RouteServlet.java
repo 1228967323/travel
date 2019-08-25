@@ -92,7 +92,7 @@ public class RouteServlet extends BaseServlet {
     }
     public ResultInfo findAll(HttpServletRequest request,HttpServletResponse response){
         List<Route> allRoute = routeService.findAllRoute();
-        System.out.println("我现在已经制造冲突了");
+        System.out.println("我现在已经制造冲突了!!!");
         return new ResultInfo(true,allRoute,"查询成功!");
     }
 }
